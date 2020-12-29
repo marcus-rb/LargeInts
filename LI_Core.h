@@ -10,8 +10,14 @@
 
 #include "LargeIntConfig.h"
 
+// *** MACROS ***
+
 #define SIZE_RATIO(x, y) (sizeof(x) / sizeof(y))
 #define BITSIZE(T) (sizeof(T)*8)
+
+#define BYTE_PTR(ptr) (const_cast<LIPP::byte*>(reinterpret_cast<const LIPP::byte*>(ptr)))
+
+// *** NAMESPACES ***
 
 #define INTERNAL_BEGIN namespace Internal {
 #define INTERNAL_END }
@@ -20,10 +26,14 @@
 
 LARGEINT_BEGIN
 
+// *** TYPEDEFS ***
+
 typedef uint8_t byte;
 typedef uint16_t word16;
 typedef uint32_t word32;
 typedef uint64_t word64;
+
+// *** CONSTANTS ***
 
 constexpr byte MAX_BYTE = 255U;
 constexpr word16 MAX_WORD16 = 65535U;

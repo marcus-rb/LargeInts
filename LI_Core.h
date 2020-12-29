@@ -10,7 +10,8 @@
 
 #include "LargeIntConfig.h"
 
-#define SIZE_RATIO(x, y) sizeof(x) / sizeof(y)
+#define SIZE_RATIO(x, y) (sizeof(x) / sizeof(y))
+#define BITSIZE(T) (sizeof(T)*8)
 
 #define INTERNAL_BEGIN namespace Internal {
 #define INTERNAL_END }

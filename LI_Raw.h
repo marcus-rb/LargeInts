@@ -12,8 +12,8 @@
 
 // TODO
 // [ ] Generic array type with necessary functionality
-//		[ ]
-//		[ ] 
+//		[ ] Conversion from smaller largeint to largeInt. Eg from 128 to 256 bit conversion or cast
+//		[ ] Equality operations
 
 LARGEINT_BEGIN // namespace LargeIntPP {
 
@@ -28,13 +28,15 @@ public:
 	template <LIPP_UTIL::LIPP_base_integral T2>
 	IntegerArray(T2 initial_value) noexcept {
 
-		// mindfuck magic
-		for (size_t i = 0; i < S*sizeof(T) / sizeof( T2 ); i++)
-			m_InternalState[i] = *((T*)&initial_value + i);
+		for (size_t i = 0; i < sizeof(T2); i++) {
+			*(BYTE_PTR(m_InternalState) + i) = *(BYTE_PTR(&initial_value) + i);
+		}
 
-		for (size_t i = S * sizeof(T) / sizeof(T2); i < S; i++)
-			m_InternalState[i] = 0;
-
+		#pragma warning (disable : 6294)
+		for (size_t i = sizeof(T2); i < S * sizeof(T); i++) {
+			*(BYTE_PTR(m_InternalState) + i) = 0;
+		}
+		#pragma warning (default : 6294)
 	}
 
 	// *** Info methods, etc ***
@@ -43,16 +45,50 @@ public:
 	}
 
 	// *** Bitwise operators ***
+
+	// right shift
 	IntegerArray operator>>(size_t amount) { // Right bit-shift
 		return ShiftR(amount);
 	}
-
-	IntegerArray operator<<(size_t amount) { // Left bit-shift
-		return ShiftL(amount);
+	IntegerArray& operator>>=(size_t amount) {
+		return ShiftR_IP(amount);
 	}
 
+	// left shift
+	IntegerArray operator<<(size_t amount) {
+		return ShiftL(amount);
+	}
 	IntegerArray& operator<<=(size_t amount) {
 		return ShiftL_IP(amount);
+	}
+
+	// bit or
+	IntegerArray operator|(const IntegerArray& other) {
+		return BitOr(*this, other);
+	}
+	IntegerArray& operator|=(const IntegerArray& other) {
+		return BitOrEq(other);
+	}
+
+	// bit and
+	IntegerArray operator&(const IntegerArray& other) {
+		return BitAnd(*this, other);
+	};
+	IntegerArray& operator&=(const IntegerArray& other) {
+		return BitAndEq(other);
+	}
+
+	// bit xor
+	IntegerArray operator^(const IntegerArray& other) {
+		return BitXor(*this, other);
+	};
+	IntegerArray& operator^=(const IntegerArray& other) {
+		return BitXorEq(other);
+	}
+
+	// bit not
+	IntegerArray operator~() {
+		return BitNot(*this);
 	}
 
 private:
@@ -80,6 +116,8 @@ private:
 
 	// *** Bitwise ops ***
 
+
+	// * SHIFTS *
 	IntegerArray& ShiftL_IP(size_t amount) {
 		
 		if (amount > BITSIZE(T)) {
@@ -99,8 +137,8 @@ private:
 	}
 
 	IntegerArray ShiftL(size_t amount) {
-		IntegerArray* temp = this;
-		return temp->ShiftL_IP(amount);
+		IntegerArray temp = *this;
+		return temp.ShiftL_IP(amount);
 	}
 
 	IntegerArray& ShiftR_IP(size_t amount) {
@@ -121,12 +159,11 @@ private:
 	}
 
 	IntegerArray ShiftR(size_t amount) {
-
-		IntegerArray* temp = this;
-
-		return temp->ShiftR_IP(amount);
+		IntegerArray temp = *this;
+		return temp.ShiftR_IP(amount);
 	}
 
+	// * BIT OR *
 	IntegerArray BitOr(const IntegerArray& lhs, const IntegerArray& rhs) {
 		IntegerArray temp = *this;
 
@@ -137,6 +174,14 @@ private:
 		return temp;
 	}
 
+	IntegerArray& BitOrEq(const IntegerArray& other) {
+		for (size_t i = 0; i < S; i++)
+			m_InternalState[i] |= other.m_InternalState[i];
+
+		return *this;
+	}
+
+	// * BIT AND *
 	IntegerArray BitAnd(const IntegerArray& lhs, const IntegerArray& rhs) {
 		IntegerArray temp = *this;
 
@@ -147,6 +192,15 @@ private:
 		return temp;
 	}
 
+	IntegerArray& BitAndEq(const IntegerArray& other) {
+		for (size_t i = 0; i < S; i++) {
+			m_InternalState[i] &= other.m_InternalState[i];
+		}
+
+		return *this;
+	}
+
+	// * XOR *
 	IntegerArray BitXor(const IntegerArray& lhs, const IntegerArray& rhs) {
 		IntegerArray temp = *this;
 
@@ -157,7 +211,15 @@ private:
 		return temp;
 	}
 
-	IntegerArray BitNot(const IntegerArray operand) {
+	IntegerArray& BitXorEq(const IntegerArray& other) {
+		for (size_t i = 0; i < S; i++)
+			m_InternalState[i] ^= other.m_InternalState[i];
+
+		return *this;
+	}
+
+	// * NOT *
+	IntegerArray BitNot(IntegerArray operand) {
 		for (size_t i = 0; i < S; i++)
 			operand.m_InternalState[i] = ~operand.m_InternalState[i];
 

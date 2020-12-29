@@ -13,6 +13,42 @@
 LARGEINT_BEGIN // nested namespace LargeIntPP::Utility
 LI_UTIL_BEGIN
 
+// debug utility
+
+enum STATUS_CODE : bool {
+	STATUS_SUCCESS, STATUS_FAIL
+};
+
+#pragma warning(disable : 26812)
+
+std::ostream& operator<<(std::ostream& stream, const STATUS_CODE& input) {
+	if (!input) {
+		stream << "SUCCESS";
+	}
+	else {
+		stream << "FAIL";
+	}
+	return stream;
+}
+
+#pragma warning(default : 26812)
+
+void LogTask(const char* taskname, STATUS_CODE code) {
+	std::cout << taskname << ": " << code << std::endl;
+}
+
+template <typename T1, typename T2>
+STATUS_CODE MemoryCompare(T1* ptr1, T2* ptr2, size_t byte_size) {
+	STATUS_CODE result = STATUS_SUCCESS;
+
+	for (size_t i = 0; i < byte_size; i++) {
+		if ( *(BYTE_PTR(ptr1) + i) != *(BYTE_PTR(ptr2) + i) )
+			result = STATUS_FAIL;
+	}
+
+	return result;
+}
+
 // various typetraits
 
 template <typename T>

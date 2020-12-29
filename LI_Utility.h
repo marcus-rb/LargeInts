@@ -5,12 +5,12 @@
 #include "LargeIntConfig.h"
 #include "LI_Core.h"
 
-#define LI_UTIL_BEGIN namespace LargeIntUtility {
+#define LI_UTIL_BEGIN namespace Utility {
 #define LI_UTIL_END }
 
-#define LIPP_UTIL LargeIntPP::LargeIntUtility
+#define LIPP_UTIL LargeIntPP::Utility
 
-LARGEINT_BEGIN // nested namespace LargeIntPP::LargeIntUtility
+LARGEINT_BEGIN // nested namespace LargeIntPP::Utility
 LI_UTIL_BEGIN
 
 // various typetraits

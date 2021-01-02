@@ -15,9 +15,13 @@ LI_UTIL_BEGIN
 
 // debug utility
 
-enum STATUS_CODE : bool {
+enum STATUS_CODE {
 	STATUS_SUCCESS, STATUS_FAIL
 };
+
+STATUS_CODE MakeStatus(bool code) {
+	return code ? STATUS_CODE::STATUS_SUCCESS : STATUS_CODE::STATUS_FAIL;
+}
 
 #pragma warning(disable : 26812)
 
@@ -47,6 +51,27 @@ STATUS_CODE MemoryCompare(T1* ptr1, T2* ptr2, size_t byte_size) {
 	}
 
 	return result;
+}
+
+
+// operating on data
+template <typename T, size_t ArraySize>
+inline void MoveLeft(size_t amount, T* data) {
+	for (size_t i = 0; i < ArraySize - amount - 1; i++)
+		*(data + i) = *(data + i + amount);
+
+	for (size_t i = ArraySize - amount; i < ArraySize; i++)
+		*(data + i) = 0;
+}
+
+template <typename T, size_t ArraySize>
+inline void MoveRight(size_t amount, T* data) {
+	for (size_t i = 0; i < ArraySize - amount; i++)
+		*(data + ArraySize - 1 - i) = *(data + ArraySize - 1 - i - amount);
+
+	for (size_t i = 0; i < amount; i++) 
+		*(data + i) = 0;
+
 }
 
 // various typetraits

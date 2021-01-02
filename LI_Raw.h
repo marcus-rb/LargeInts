@@ -46,7 +46,6 @@ public:
 
 	// *** Bitwise operators ***
 
-	// right shift
 	IntegerArray operator>>(size_t amount) { // Right bit-shift
 		return ShiftR(amount);
 	}
@@ -54,7 +53,6 @@ public:
 		return ShiftR_IP(amount);
 	}
 
-	// left shift
 	IntegerArray operator<<(size_t amount) {
 		return ShiftL(amount);
 	}
@@ -62,7 +60,6 @@ public:
 		return ShiftL_IP(amount);
 	}
 
-	// bit or
 	IntegerArray operator|(const IntegerArray& other) {
 		return BitOr(*this, other);
 	}
@@ -70,7 +67,6 @@ public:
 		return BitOrEq(other);
 	}
 
-	// bit and
 	IntegerArray operator&(const IntegerArray& other) {
 		return BitAnd(*this, other);
 	};
@@ -78,7 +74,6 @@ public:
 		return BitAndEq(other);
 	}
 
-	// bit xor
 	IntegerArray operator^(const IntegerArray& other) {
 		return BitXor(*this, other);
 	};
@@ -86,43 +81,45 @@ public:
 		return BitXorEq(other);
 	}
 
-	// bit not
 	IntegerArray operator~() {
 		return BitNot(*this);
 	}
 
+	// *** Comparison ***
+	bool operator==(const IntegerArray& other) {
+		return Equal(other);
+	}
+
+	bool operator!=(const IntegerArray& other) {
+		return !Equal(other);
+	}
+
+	bool operator>(const IntegerArray& other) {
+
+	}
+
+	bool operator<(const IntegerArray& other) {
+
+	}
+
+	bool operator>=(const IntegerArray& other) {
+
+	}
+
+	bool operator<=(const IntegerArray& other) {
+
+	}
+
+
 private:
-	// *** Helper functions ***
-
-	// maybe these two can be a part of LIPP_UTIL
-	inline void MoveLeft(size_t amount, T* data) {
-		for (size_t i = 0; i < S - amount - 1; i++)
-			*(data + i) = *(data + i + amount);
-
-		for (size_t i = S - amount; i < S; i++)
-			*(data + i) = 0;
-	}
-
-	inline void MoveRight(size_t amount, T* data) {
-
-		for (size_t i = 0; i < S - amount; i++)
-			*(data + S - 1 - i) = *(data + S - 1 - i - amount);
-
-		for (size_t i = 0; i < amount; i++) {
-			*(data + i) = 0;
-		}
-
-	}
-
 	// *** Bitwise ops ***
-
 
 	// * SHIFTS *
 	IntegerArray& ShiftL_IP(size_t amount) {
 		
 		if (amount > BITSIZE(T)) {
 			size_t remainder = amount % BITSIZE(T);
-			MoveRight((amount - remainder) / BITSIZE(T), m_InternalState);
+			LIPP_UTIL::MoveRight<T, S>((amount - remainder) / BITSIZE(T), m_InternalState);
 			amount = remainder;
 		}
 
@@ -144,7 +141,7 @@ private:
 	IntegerArray& ShiftR_IP(size_t amount) {
 		if (amount > BITSIZE(T)) {
 			size_t remainder = amount % BITSIZE(T);
-			MoveLeft((amount - remainder) / BITSIZE(T), m_InternalState);
+			LIPP_UTIL::MoveLeft<T, S>((amount - remainder) / BITSIZE(T), m_InternalState);
 			amount = remainder;
 		}
 
@@ -226,6 +223,32 @@ private:
 		return operand;
 	}
 	
+	// *** Comparison ***
+
+	bool Equal(const IntegerArray& other) {
+		LIPP::word32 result = 0;
+		for (size_t i = 0; i < S; i++)
+			result += m_InternalState[i] == other.m_InternalState[i];
+
+		return result == S;
+	};
+
+	bool NotEqual(const IntegerArray& other) {
+		return !Equal(other);
+	}
+
+	bool Greater(const IntegerArray& other) {
+		for (size_t i = S; i < S; i--) {
+
+		}
+	};
+
+	bool Less(const IntegerArray& other);
+
+	bool GreaterOrEqual(const IntegerArray& other);
+
+	bool LessOrEqual(const IntegerArray& other);
+
 	// *** Arithmetic ***
 
 private:

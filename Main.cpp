@@ -14,6 +14,7 @@ int main() {
 	#define DEFAULT 1
 	#define SHIFTS 1
 	#define BITOPS 1
+	#define COMPARISON 1
 
 	// SETUP
 
@@ -153,6 +154,22 @@ int main() {
 	LOGLAST("Bitwise not");
 
 	#endif
+
+#endif
+
+#if COMPARISON == 1
+
+	LOGSEC("Comparison");
+
+	IntegerArray<LIPP::byte, 4> ComparisonOps1(27361u);
+	word32 ComparisonOpsComp1 = 27361;
+
+	IntegerArray<LIPP::byte, 4> ComparisonOps2(27361u);
+	word32 ComparisonOpsComp2 = 27461;
+
+	CHECK = LIPP_UTIL::MakeStatus(ComparisonOps1 == ComparisonOps2);
+
+	LOGLAST("Equals");
 
 #endif
 

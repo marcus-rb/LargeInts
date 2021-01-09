@@ -19,11 +19,12 @@ enum STATUS_CODE {
 	STATUS_SUCCESS, STATUS_FAIL
 };
 
+#pragma warning(disable : 26812)
+
 STATUS_CODE MakeStatus(bool code) {
 	return code ? STATUS_CODE::STATUS_SUCCESS : STATUS_CODE::STATUS_FAIL;
 }
 
-#pragma warning(disable : 26812)
 
 std::ostream& operator<<(std::ostream& stream, const STATUS_CODE& input) {
 	if (!input) {

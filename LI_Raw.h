@@ -226,11 +226,12 @@ private:
 	// *** Comparison ***
 
 	bool Equal(const IntegerArray& other) {
-		LIPP::word32 result = 0;
-		for (size_t i = 0; i < S; i++)
-			result += m_InternalState[i] == other.m_InternalState[i];
+		for (size_t i = 0; i < S; i++) {
+			if (m_InternalState[i] != other.m_InternalState[i])
+				return false;
+		}
 
-		return result == S;
+		return true;
 	};
 
 	bool NotEqual(const IntegerArray& other) {

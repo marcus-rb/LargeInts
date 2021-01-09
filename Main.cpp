@@ -159,17 +159,27 @@ int main() {
 
 #if COMPARISON == 1
 
+	using LIPP32 = LIPP::IntegerArray<LIPP::byte, 4>;
+
 	LOGSEC("Comparison");
 
-	IntegerArray<LIPP::byte, 4> ComparisonOps1(27361u);
-	word32 ComparisonOpsComp1 = 27361;
+	LIPP32 ComparisonEq1(55555u);
+	LIPP32 ComparisonEq2(55555u);
+	LIPP32 ComparisonSmall(55554u);
+	LIPP32 ComparisonLarge(55556u);
 
-	IntegerArray<LIPP::byte, 4> ComparisonOps2(27361u);
-	word32 ComparisonOpsComp2 = 27461;
+	word32 Comparison1 = 55555;
+	word32 Comparison2 = 55555;
+	word32 Comparison3 = 55554;
+	word32 Comparison4 = 55556;
 
-	CHECK = LIPP_UTIL::MakeStatus(ComparisonOps1 == ComparisonOps2);
 
-	LOGLAST("Equals");
+
+	// How do you check comparisons.
+	// Two of the same number
+	// One larger
+	// One smaller
+	// Control-number for each
 
 #endif
 

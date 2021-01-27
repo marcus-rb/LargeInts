@@ -159,6 +159,12 @@ int main() {
 
 #if COMPARISON == 1
 
+	#define EQUALITY 1
+	#define GREATER 1
+	#define LESS 1
+	#define GREQUAL 1
+	#define LESSEQUAL 1
+
 	using LIPP32 = LIPP::IntegerArray<LIPP::byte, 4>;
 
 	LOGSEC("Comparison");
@@ -168,12 +174,14 @@ int main() {
 	LIPP32 ComparisonSmall(55554u);
 	LIPP32 ComparisonLarge(55556u);
 
-	word32 Comparison1 = 55555;
-	word32 Comparison2 = 55555;
-	word32 Comparison3 = 55554;
-	word32 Comparison4 = 55556;
+	word32 Comparison1 = ComparisonEq1.CastToInteger<word32>();
+	word32 Comparison2 = ComparisonEq2.CastToInteger<word32>();
+	word32 Comparison3 = ComparisonSmall.CastToInteger<word32>();
+	word32 Comparison4 = ComparisonLarge.CastToInteger<word32>();
 
+	CHECK = LIPP_UTIL::MakeStatus( (ComparisonEq1 == ComparisonEq2) == (Comparison1 == Comparison2));
 
+	LOGLAST("Equality");
 
 	// How do you check comparisons.
 	// Two of the same number

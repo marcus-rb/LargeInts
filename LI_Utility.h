@@ -87,6 +87,9 @@ struct is_LIPP_base_integral : public std::bool_constant<
 template <typename T>
 concept LIPP_base_integral = is_LIPP_base_integral<T>::value;
 
+template <typename T>
+concept Integer = std::is_integral<T>::value;
+
 // *** Metafunctions for MAX of an integer_type ***
 template<typename T>
 constexpr T MAX_OF_T = 0;

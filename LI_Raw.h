@@ -39,9 +39,14 @@ public:
 		#pragma warning (default : 6294)
 	}
 
-	// *** Info methods, etc ***
+	// *** Info methods, utility, etc ***
 	const T* Raw() const {
 		return m_InternalState;
+	}
+
+	template <LIPP_UTIL::Integer NewT>
+	NewT CastToInteger() {
+		return *(reinterpret_cast<NewT*>(m_InternalState));
 	}
 
 	// *** Bitwise operators ***
@@ -239,16 +244,24 @@ private:
 	}
 
 	bool Greater(const IntegerArray& other) {
-		for (size_t i = S; i < S; i--) {
-
+		for (size_t i = S; i > 0; i--) {
+			if (m_InternalState[i - 1] != other.m_InternalState[i - 1]) {
+				if (m_InternalState[i - 1] > other.m_InternalState[i - 1]) {
+					return true;
+				}
+				else return false;
+			}
 		}
+		return false;
 	};
 
 	bool Less(const IntegerArray& other);
 
 	bool GreaterOrEqual(const IntegerArray& other);
 
-	bool LessOrEqual(const IntegerArray& other);
+	bool LessOrEqual(const IntegerArray& other) {
+		return !Greater(other);
+	};
 
 	// *** Arithmetic ***
 

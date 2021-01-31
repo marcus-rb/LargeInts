@@ -100,19 +100,19 @@ public:
 	}
 
 	bool operator>(const IntegerArray& other) {
-
+		return Greater(other);
 	}
 
 	bool operator<(const IntegerArray& other) {
-
+		return Less(other);
 	}
 
 	bool operator>=(const IntegerArray& other) {
-
+		return GreaterOrEqual(other);
 	}
 
 	bool operator<=(const IntegerArray& other) {
-
+		return LessOrEqual(other);
 	}
 
 

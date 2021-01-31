@@ -245,19 +245,25 @@ private:
 
 	bool Greater(const IntegerArray& other) {
 		for (size_t i = S; i > 0; i--) {
-			if (m_InternalState[i - 1] != other.m_InternalState[i - 1]) {
 				if (m_InternalState[i - 1] > other.m_InternalState[i - 1]) {
 					return true;
 				}
-				else return false;
+		}
+		return false;
+	};
+
+	bool Less(const IntegerArray& other) {
+		for (size_t i = S; i > 0; i--) {
+			if (m_InternalState[i - 1] < other.m_InternalState[i - 1]) {
+				return true;
 			}
 		}
 		return false;
 	};
 
-	bool Less(const IntegerArray& other);
-
-	bool GreaterOrEqual(const IntegerArray& other);
+	bool GreaterOrEqual(const IntegerArray& other) {
+		return !Less(other);
+	};
 
 	bool LessOrEqual(const IntegerArray& other) {
 		return !Greater(other);

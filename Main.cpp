@@ -179,15 +179,36 @@ int main() {
 	word32 Comparison3 = ComparisonSmall.CastToInteger<word32>();
 	word32 Comparison4 = ComparisonLarge.CastToInteger<word32>();
 
+	#if EQUALITY == 1
+
 	CHECK = LIPP_UTIL::MakeStatus( (ComparisonEq1 == ComparisonEq2) == (Comparison1 == Comparison2));
-
+	
 	LOGLAST("Equality");
+	#endif
 
-	// How do you check comparisons.
-	// Two of the same number
-	// One larger
-	// One smaller
-	// Control-number for each
+	#if GREATER == 1
+	CHECK = LIPP_UTIL::MakeStatus((ComparisonEq1 > ComparisonSmall) == (Comparison1 > Comparison3));
+
+	LOGLAST("GREATER");
+	#endif
+
+	#if LESS == 1
+	CHECK = LIPP_UTIL::MakeStatus((ComparisonEq1 < ComparisonLarge) == (Comparison1 < Comparison4));
+	
+	LOGLAST("LESS");
+	#endif
+
+	#if GREQUAL == 1
+	CHECK = LIPP_UTIL::MakeStatus((ComparisonEq1 >= ComparisonLarge) == (Comparison1 >= Comparison4));
+
+	LOGLAST("GREATER OR EQUAL");
+	#endif
+
+	#if LESSEQUAL == 1
+	CHECK = LIPP_UTIL::MakeStatus((ComparisonEq1 <= ComparisonLarge) == (Comparison1 <= Comparison4));
+
+	LOGLAST("LESS OR EQUAL");
+	#endif
 
 #endif
 

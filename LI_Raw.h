@@ -115,6 +115,22 @@ public:
 		return LessOrEqual(other);
 	}
 
+	// *** Arithmetic ***
+	IntegerArray operator+(const IntegerArray& other) {
+		return add(other);
+	}
+
+	IntegerArray operator-(const IntegerArray& other) {
+		return subtract(other);
+	}
+
+	IntegerArray operator*(const IntegerArray& other) {
+		return multiply(other);
+	}
+
+	IntegerArray operator/(const IntegerArray& other) {
+		return divide(other);
+	}
 
 private:
 	// *** Bitwise ops ***
@@ -270,6 +286,22 @@ private:
 	};
 
 	// *** Arithmetic ***
+
+	IntegerArray add(const IntegerArray& other) {
+
+	}
+
+	IntegerArray subtract(const IntegerArray& other) {
+
+	}
+
+	IntegerArray multiply(const IntegerArray& other) {
+
+	}
+
+	IntegerArray divide(const IntegerArray& other) {
+
+	}
 
 private:
 	T m_InternalState[S];

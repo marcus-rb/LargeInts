@@ -22,6 +22,12 @@ template <LIPP_UTIL::LIPP_base_integral T, size_t S>
 class IntegerArray {
 
 public:
+
+	using base_type = T;
+	using base_ptr = T*;
+	using base_ref = T&;
+	using const_base_ptr = const T*;
+
 	// *** Constructors ***
 	IntegerArray(void) noexcept {}
 
@@ -40,7 +46,7 @@ public:
 	}
 
 	// *** Info methods, utility, etc ***
-	const T* Raw() const {
+	const base_ptr Raw() const {
 		return m_InternalState;
 	}
 
@@ -117,19 +123,19 @@ public:
 
 	// *** Arithmetic ***
 	IntegerArray operator+(const IntegerArray& other) {
-		return add(other);
+		return Add(other);
 	}
 
 	IntegerArray operator-(const IntegerArray& other) {
-		return subtract(other);
+		return Subtract(other);
 	}
 
 	IntegerArray operator*(const IntegerArray& other) {
-		return multiply(other);
+		return Multiply(other);
 	}
 
 	IntegerArray operator/(const IntegerArray& other) {
-		return divide(other);
+		return Divide(other);
 	}
 
 private:
@@ -287,19 +293,56 @@ private:
 
 	// *** Arithmetic ***
 
-	IntegerArray add(const IntegerArray& other) {
+	IntegerArray Add(const IntegerArray& other) {
+		
+		IntegerArray Result(0u);
+
+		const_base_ptr data1 = m_InternalState;
+		const_base_ptr data2 = other.m_InternalState;
+
+		base_type OverflowCarry = 0; // Used for carrying bits through in between data storage units. 
+		constexpr size_t UnitSize = sizeof(base_type);
+
+		for (size_t i = 0; i < S; i++) {
+
+			base_type Operand1 = *(data1 + i);
+			base_type Operand2 = *(data2 + i);
+			base_type LargestInCycle = LIPP_UTIL::Largest(Operand1, Operand2);
+
+			// if transfering the overflow on this round causes undefined behaviour on built in types we must carry the overflow
+			// to the next round
+			while (Operand1 <= LIPP_UTIL::MAX_OF_T<base_type> && OverflowCarry > 0) {
+				OverflowCarry--;
+				Operand1++;
+			}
+
+			while (Operand2 != 0) {
+				base_type Carry = Operand1 & Operand2;
+				Operand1 ^= Operand2;
+				Operand2 = Carry << 1;
+			}
+
+			if (LargestInCycle > Operand1) {
+				OverflowCarry++;
+			}
+
+			Result.m_InternalState[i] = Operand1;
+
+		}
+
+		return Result;
 
 	}
 
-	IntegerArray subtract(const IntegerArray& other) {
+	IntegerArray Subtract(const IntegerArray& other) {
 
 	}
 
-	IntegerArray multiply(const IntegerArray& other) {
+	IntegerArray Multiply(const IntegerArray& other) {
 
 	}
 
-	IntegerArray divide(const IntegerArray& other) {
+	IntegerArray Divide(const IntegerArray& other) {
 
 	}
 
@@ -307,5 +350,21 @@ private:
 	T m_InternalState[S];
 
 };
+
+#if 0
+template <size_t S>
+class IntegerArray<LIPP::word64, S> {
+private:
+
+	IntegerArray Add(const IntegerArray& other) {
+		LIPP::word64 buffer;
+
+		for (size_t S; i > 0; i--) {
+
+		}
+	}
+};
+
+#endif
 
 LARGEINT_END // close brace } for namespace LargeIntPP

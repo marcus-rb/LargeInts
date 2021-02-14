@@ -15,6 +15,7 @@ int main() {
 	#define SHIFTS 1
 	#define BITOPS 1
 	#define COMPARISON 1
+	#define ARITHMETIC 1
 
 	// SETUP
 
@@ -212,5 +213,27 @@ int main() {
 
 #endif
 
+#if ARITHMETIC == 1
+
+	#define ADD 1
+	#define SUBTRACT 1
+	#define DIVIDE 1
+	#define MULTIPLY 1
+
+	LIPP32 Arithmetic1(LIPP_UTIL::MAX_OF_T<word16>);
+	LIPP32 Arithmetic2(55u);
+	word32 Arithmetic1Base = Arithmetic1.CastToInteger<word32>();
+	word32 Arithmetic2Base = Arithmetic2.CastToInteger<word32>();
+
+	LOGSEC("ARITHMETIC");
+
+	#if ADD
+
+	CHECK = LIPP_UTIL::MakeStatus((Arithmetic1 + Arithmetic2) == (Arithmetic1Base + Arithmetic2Base));
+	LOGLAST("ADDITION");
+
+	#endif
+
+#endif
 	std::cin.get();
 }

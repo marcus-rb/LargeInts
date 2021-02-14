@@ -90,6 +90,18 @@ concept LIPP_base_integral = is_LIPP_base_integral<T>::value;
 template <typename T>
 concept Integer = std::is_integral<T>::value;
 
+// comparison
+
+template<Integer T>
+T& Largest(T& lhs, T& rhs) {
+	return (lhs > rhs) ? lhs : rhs;
+}
+
+template <Integer T>
+T Largest(T&& lhs, T&& rhs) {
+	return (lhs > rhs) ? lhs : rhs;
+}
+
 // *** Metafunctions for MAX of an integer_type ***
 template<typename T>
 constexpr T MAX_OF_T = 0;
